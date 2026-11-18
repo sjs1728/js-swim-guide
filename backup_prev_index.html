@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JS운동발달센터 신규 수영회원 안내</title>
+<meta property="og:title" content="JS운동발달센터 신규 수영회원 안내">
+<meta property="og:description" content="입장·귀가, 오시는 길·주차, 준비물, 수업 전 확인, 보강·회비 안내">
+<meta property="og:image" content="https://sjs1728.github.io/js-swim-guide/og.jpg">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+    background: #1a1a2e;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slides-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slide {
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    max-width: 400px;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.5);
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    padding: 22px 18px 26px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    -webkit-overflow-scrolling: touch;
+  }
+  .slide::-webkit-scrollbar { width: 0; }
+  .slide.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+  .slide.exit { opacity: 0; transform: scale(0.9) translateY(-30px); }
+
+  /* 커버 */
+  .cover { text-align: center; padding-top: 34px; padding-bottom: 34px; }
+  .cover .logo { width: 190px; height: auto; margin-bottom: 16px; }
+  .cover .tag { font-size: 10px; letter-spacing: 2.6px; color: #1a3a5c; font-weight: 700; margin-bottom: 14px; }
+  .cover h1 { font-size: 30px; line-height: 1.28; color: #1a3a5c; font-weight: 900; letter-spacing: -0.8px; }
+  .cover h1 em { font-style: normal; color: #e6a817; }
+  .cover .sub { font-size: 13px; color: #8b95a1; margin-top: 10px; font-weight: 500; }
+  .cover .badge { display: inline-block; margin-top: 18px; background: #1a3a5c; color: #fff; font-size: 12px; font-weight: 700; padding: 8px 20px; border-radius: 20px; letter-spacing: .3px; }
+  .cover .coverart { margin-top: 22px; }
+
+  /* 공통 */
+  .st { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 900; color: #1a3a5c; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .st .no { flex: none; width: 26px; height: 26px; border-radius: 9px; background: #eef3f8; color: #1a3a5c; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .lead { font-size: 12.5px; color: #6b7684; margin: 6px 0 14px; line-height: 1.55; }
+
+  .card { border-radius: 16px; padding: 14px 14px 13px; margin-bottom: 10px; border: 1px solid #e6ecf2; background: #fafcfe; }
+  .card.navy { background: #1a3a5c; border-color: #1a3a5c; color: #fff; }
+  .card.gold { background: #fff8e9; border-color: #f4e0b3; }
+  .card.red { background: #fff3f1; border-color: #f6cfc7; }
+  .card h3 { font-size: 13.5px; font-weight: 800; color: #1a3a5c; margin-bottom: 8px; letter-spacing: -0.3px; }
+  .card.navy h3 { color: #ffd66b; }
+  .card p, .card li { font-size: 12.5px; line-height: 1.62; color: #414b57; }
+  .card.navy p, .card.navy li { color: #dbe6f2; }
+  .card ul { list-style: none; }
+  .card li { position: relative; padding-left: 12px; margin-bottom: 4px; }
+  .card li::before { content: ''; position: absolute; left: 0; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: #b9c6d4; }
+  .card.navy li::before { background: #6f8bab; }
+  .b { font-weight: 800; color: #1a3a5c; }
+  .card.navy .b { color: #fff; }
+  .em { color: #c0392b; font-weight: 800; }
+  .gold-t { color: #b57f10; font-weight: 800; }
+
+  /* 1장 타임라인 */
+  .flow { display: flex; align-items: center; gap: 6px; margin: 6px 0 2px; }
+  .flow .node { flex: none; width: 92px; text-align: center; }
+  .flow .node .clock { font-size: 20px; font-weight: 900; color: #1a3a5c; letter-spacing: -0.6px; }
+  .flow .node .lb { font-size: 10.5px; color: #7c8794; font-weight: 700; margin-top: 2px; }
+  .flow .line { flex: 1; height: 2px; background: repeating-linear-gradient(90deg,#c9d6e3 0 6px,transparent 6px 11px); position: relative; }
+  .flow .line::after { content: ''; position: absolute; right: -1px; top: -4px; border-left: 7px solid #c9d6e3; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+  .flow2 { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 14px; }
+  .flow2 .step { flex: 1; text-align: center; font-size: 10.5px; color: #6b7684; font-weight: 700; line-height: 1.45; }
+  .flow2 .step .num { display: block; width: 22px; height: 22px; margin: 0 auto 5px; border-radius: 50%; background: #1a3a5c; color: #fff; font-size: 11px; font-weight: 800; line-height: 22px; }
+
+  /* 준비물 */
+  .items { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 4px 0 10px; }
+  .item { text-align: center; }
+  .item svg { display: block; margin: 0 auto 6px; }
+  .item .nm { font-size: 10.5px; font-weight: 800; color: #1a3a5c; line-height: 1.3; }
+  .center-kit { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+  .center-kit span { font-size: 11px; background: #fff; border: 1px solid #dfe8f0; border-radius: 999px; padding: 5px 10px; color: #33587a; font-weight: 700; }
+
+  /* 주차 5부제 큰 칸 */
+  .mtiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin: 2px 0 10px; }
+  .mtile { background: #eaf3fb; border-radius: 13px; padding: 9px 2px 8px; text-align: center; border: 1px solid #dbe8f5; }
+  .mtile .d { font-size: 10.5px; font-weight: 800; color: #6b7684; margin-bottom: 2px; }
+  .mtile .n { font-size: 19px; font-weight: 900; color: #1a3a5c; letter-spacing: -0.5px; }
+
+  /* 회비 달력 */
+  .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-top: 6px; }
+  .cal div { text-align: center; font-size: 10px; color: #9aa3ae; padding: 4px 0; border-radius: 6px; }
+  .cal .hd { color: #6b7684; font-weight: 800; font-size: 9.5px; }
+  .cal .pay { background: #1a3a5c; color: #fff; font-weight: 900; box-shadow: 0 4px 12px rgba(26,58,92,.28); }
+
+  .addr { font-size: 12.5px; line-height: 1.6; color: #414b57; }
+  .addr .b { display: block; font-size: 13.5px; margin-bottom: 3px; }
+  .mapnote { font-size: 10.5px; color: #8b95a1; line-height: 1.55; margin: -4px 0 10px; }
+
+  .fin { text-align: center; margin-top: 14px; font-size: 12.5px; color: #1a3a5c; font-weight: 800; line-height: 1.7; }
+  .fin small { display: block; font-size: 11px; color: #94a0ac; font-weight: 600; margin-top: 4px; }
+
+  /* 네비 */
+  .nav {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);
+    padding: 9px 14px; border-radius: 999px; z-index: 50; white-space: nowrap;
+  }
+  .nav button {
+    background: none; border: none; color: #fff; font-size: 16px; cursor: pointer;
+    opacity: .85; padding: 2px 4px; line-height: 1;
+  }
+  .nav button:disabled { opacity: .25; cursor: default; }
+  .dots { display: flex; gap: 5px; flex-wrap: nowrap; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.35); cursor: pointer; transition: .3s; flex: none; }
+  .dot.active { background: #e6a817; width: 14px; border-radius: 3px; }
+  #counter { color: rgba(255,255,255,.75); font-size: 11px; font-weight: 700; min-width: 30px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="slides-wrapper">
+
+  <!-- 0. 표지 -->
+  <div class="slide cover active">
+    <img class="logo" src="js_logo.jpg" alt="JS 운동발달센터">
+    <div class="tag">SPECIAL PHYSICAL EDUCATION</div>
+    <h1>신규 수영회원<br><em>안내</em></h1>
+    <div class="sub">입장·귀가부터 준비물까지</div>
+    <div class="badge">첫 수업 전 꼭 읽어주세요</div>
+    <div class="coverart">
+      <svg width="230" height="96" viewBox="0 0 230 96" fill="none">
+        <circle cx="115" cy="48" r="46" fill="#eef3f8"/>
+        <path d="M40 66c10-7 20-7 30 0s20 7 30 0 20-7 30 0 20 7 30 0 20-7 30 0" stroke="#9dc3e0" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M40 78c10-7 20-7 30 0s20 7 30 0 20-7 30 0 20 7 30 0 20-7 30 0" stroke="#cfe2f0" stroke-width="3.5" stroke-linecap="round"/>
+        <g transform="translate(88 20)">
+          <circle cx="18" cy="12" r="9" fill="#1a3a5c"/>
+          <path d="M9 26h22l-3 20H12L9 26z" fill="#33587a"/>
+          <path d="M4 30l8-4M40 30l-8-4" stroke="#1a3a5c" stroke-width="4" stroke-linecap="round"/>
+          <rect x="15" y="16" width="16" height="5" rx="2.5" fill="#e6a817"/>
+        </g>
+        <circle cx="170" cy="30" r="5" fill="#e6a817" opacity=".85"/>
+        <circle cx="60" cy="24" r="3" fill="#9dc3e0"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 1. 첫 수영 -->
+  <div class="slide">
+    <div class="st"><span class="no">1</span>첫 수영, 이렇게 만나요</div>
+    <div class="lead">3시 수업 기준입니다. 시간에 맞춰 탈의실로 들어와 주세요.</div>
+
+    <div class="card gold">
+      <div class="flow">
+        <div class="node"><div class="clock">3:10</div><div class="lb">탈의실 입장</div></div>
+        <div class="line"></div>
+        <div class="node"><div class="clock">4:00</div><div class="lb">로비에서 만나기</div></div>
+      </div>
+      <div class="flow2">
+        <div class="step"><span class="num">1</span>옷 갈아입기</div>
+        <div class="step"><span class="num">2</span>수업</div>
+        <div class="step"><span class="num">3</span>샤워</div>
+        <div class="step"><span class="num">4</span>귀가 준비</div>
+      </div>
+    </div>
+
+    <div class="card red">
+      <h3>🔒 탈의실은 보호자 출입이 불가합니다</h3>
+      <p>옷 갈아입기부터 수업, 샤워, 귀가 준비까지 <span class="b">지도자가 도와드립니다.</span><br>보호자님은 로비에서 아이의 <span class="b">머리만 말려주세요.</span></p>
+    </div>
+
+    <div class="fin">로비에서 기다려 주시면<br>수업을 마치고 아이를 인계해 드립니다</div>
+  </div>
+
+  <!-- 2. 오시는 길 -->
+  <div class="slide">
+    <div class="st"><span class="no">2</span>수영장 찾아오시는 길</div>
+
+    <div class="card">
+      <div class="addr">
+        <span class="b">부산학생교육문화회관 지하 1층 수영장</span>
+        부산진구 성지곡로 15 · 초읍삼거리에서 <span class="b">도보 약 5분</span>
+      </div>
+    </div>
+
+    <svg viewBox="0 0 344 302" width="100%" style="display:block;margin:0 0 8px" fill="none">
+      <rect x="1" y="1" width="342" height="300" rx="16" fill="#f1f7fb"/>
+
+      <!-- 도로 테두리 -->
+      <g stroke="#e0ebf4" stroke-width="24" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M96 272 L154 176 L204 30"/>
+        <path d="M96 272 L338 258"/>
+        <path d="M96 272 L46 206"/>
+      </g>
+      <g stroke="#ffffff" stroke-width="19" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M96 272 L154 176 L204 30"/>
+        <path d="M96 272 L338 258"/>
+        <path d="M96 272 L46 206"/>
+      </g>
+      <text x="198" y="122" font-size="8" fill="#9aabb9" text-anchor="middle" transform="rotate(-71 198 122)">성지곡로</text>
+
+      <!-- 회관 -->
+      <rect x="24" y="32" width="138" height="84" rx="10" fill="#1a3a5c"/>
+      <text x="36" y="54" font-size="10" font-weight="700" fill="#fff">부산학생교육</text>
+      <text x="36" y="68" font-size="10" font-weight="700" fill="#fff">문화회관</text>
+      <text x="36" y="85" font-size="9" font-weight="800" fill="#ffd66b">지하 1층 수영장</text>
+      <path d="M36 93h114" stroke="#3c5f83" stroke-width="1"/>
+      <text x="36" y="107" font-size="8" fill="#c9dcee">P 지하주차장 · 2시간 무료</text>
+
+      <!-- 공영주차장 -->
+      <rect x="24" y="126" width="130" height="46" rx="9" fill="#fff8e8" stroke="#efd9a6"/>
+      <text x="36" y="145" font-size="9.5" font-weight="800" fill="#8a6410">P 공영주차장</text>
+      <text x="36" y="160" font-size="7.5" fill="#a99a7a">초읍천로 117 · 공원 입구 옆</text>
+
+      <!-- 공원 입구 -->
+      <circle cx="58" cy="222" r="4" fill="#2e7d4f"/>
+      <text x="68" y="226" font-size="8" fill="#4b7c62" stroke="#f1f7fb" stroke-width="2.6" style="paint-order:stroke">공원 입구</text>
+
+      <!-- 정류장 -->
+      <rect x="224" y="220" width="112" height="22" rx="7" fill="#fff" stroke="#cfe0ec"/>
+      <text x="232" y="235" font-size="8.5" font-weight="700" fill="#33587a">🚌 어린이대공원 정류장</text>
+      <text x="300" y="290" font-size="8" fill="#8fa0ae" text-anchor="middle">스타벅스</text>
+
+      <!-- 도보 경로 -->
+      <path d="M246 244 L168 130" stroke="#1a3a5c" stroke-width="2" stroke-dasharray="5 4" opacity=".45"/>
+      <rect x="190" y="180" width="52" height="15" rx="7" fill="#fff" opacity=".92"/>
+      <text x="216" y="191" font-size="8" font-weight="800" fill="#1a3a5c" text-anchor="middle">도보 5분</text>
+
+      <!-- 차량 경로 -->
+      <path d="M330 261 L96 272 L180 108" stroke="#c0392b" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M180 106 L181.2 117.4 L171.4 113.2 Z" fill="#c0392b"/>
+
+      <!-- 삼거리 -->
+      <circle cx="96" cy="272" r="7" fill="#d7e6f2" stroke="#b9cfe0"/>
+      <text x="96" y="296" font-size="9" font-weight="800" fill="#1a3a5c" text-anchor="middle">초읍삼거리</text>
+
+      <!-- 범례·방위 -->
+      <rect x="240" y="44" width="10" height="2.6" rx="1.2" fill="#c0392b"/>
+      <text x="256" y="48" font-size="8" fill="#5c6b78">차량</text>
+      <path d="M240 60h10" stroke="#1a3a5c" stroke-width="2" stroke-dasharray="4 3" opacity=".5"/>
+      <text x="256" y="63" font-size="8" fill="#5c6b78">도보</text>
+      <text x="334" y="22" font-size="8" fill="#8b95a1" text-anchor="end">↑ 북쪽</text>
+    </svg>
+
+    <div class="mapnote">초읍삼거리 → 성지곡로 → 회관. 정류장에서 내려 걸어도 5분 거리입니다.</div>
+  </div>
+
+  <!-- 3. 차로 오시나요 -->
+  <div class="slide">
+    <div class="st"><span class="no">3</span>차로 오시나요?</div>
+    <div class="lead">회관 지하주차장은 2시간 무료입니다. 입차 제한 끝번호를 확인해 주세요.</div>
+
+    <div class="card navy">
+      <h3>🅿️ 회관 지하주차장 2시간 무료</h3>
+      <p>수영장 입구 앞 지하주차장<br>수영장 카운터에서 <span class="b">주차권 수령</span> 후 나가면 무료 처리됩니다.</p>
+    </div>
+
+    <div class="card">
+      <h3>차량 5부제 · 입차 제한 끝번호</h3>
+      <div class="mtiles">
+        <div class="mtile"><div class="d">화</div><div class="n">2·7</div></div>
+        <div class="mtile"><div class="d">수</div><div class="n">3·8</div></div>
+        <div class="mtile"><div class="d">목</div><div class="n">4·9</div></div>
+        <div class="mtile"><div class="d">금</div><div class="n">5·0</div></div>
+      </div>
+      <p>주말 제한 없음<br><span class="gold-t">경차 · 장애인 차량 · 전기차는 제외</span></p>
+    </div>
+
+    <div class="card gold">
+      <h3>행사일에는 대기가 길어요</h3>
+      <p><span class="em">평일·토요일 회관 행사일</span>에는 주차 대기가 길어질 수 있어요. 여유 있게 오시거나 <span class="b">어린이대공원 공영주차장</span>을 이용해 주세요.<br><span style="color:#8b95a1;font-size:11.5px">공영주차장 요금은 보호자 부담입니다.</span></p>
+    </div>
+  </div>
+
+  <!-- 4. 준비물 -->
+  <div class="slide">
+    <div class="st"><span class="no">4</span>수영 가방을 챙겨요</div>
+    <div class="lead">첫 수업 준비물 네 가지입니다.</div>
+
+    <div class="items">
+      <div class="item">
+        <svg width="58" height="58" viewBox="0 0 58 58"><rect x="2" y="2" width="54" height="54" rx="16" fill="#eef3f8"/><path d="M21 18h16l-2 6h-12l-2-6z" fill="#1a3a5c"/><path d="M19 24h20l-3 18H22l-3-18z" fill="#33587a"/><path d="M16 28l-5 6M42 28l5 6" stroke="#1a3a5c" stroke-width="3" stroke-linecap="round"/><rect x="26" y="30" width="6" height="10" rx="2" fill="#e6a817"/></svg>
+        <div class="nm">수영복</div>
+      </div>
+      <div class="item">
+        <svg width="58" height="58" viewBox="0 0 58 58"><rect x="2" y="2" width="54" height="54" rx="16" fill="#eef3f8"/><circle cx="20" cy="29" r="9" stroke="#1a3a5c" stroke-width="3.2" fill="#bfe0f5"/><circle cx="38" cy="29" r="9" stroke="#1a3a5c" stroke-width="3.2" fill="#bfe0f5"/><path d="M11 25l-4-3M47 25l4-3" stroke="#1a3a5c" stroke-width="2.6" stroke-linecap="round"/></svg>
+        <div class="nm">수경</div>
+      </div>
+      <div class="item">
+        <svg width="58" height="58" viewBox="0 0 58 58"><rect x="2" y="2" width="54" height="54" rx="16" fill="#eef3f8"/><rect x="13" y="17" width="32" height="9" rx="4.5" fill="#e6a817"/><rect x="15" y="26" width="28" height="17" rx="5" fill="#fff" stroke="#dbe7f1"/><path d="M19 31h20M19 36h20" stroke="#cfe2f0" stroke-width="2" stroke-linecap="round"/></svg>
+        <div class="nm">수건 1장</div>
+      </div>
+      <div class="item">
+        <svg width="58" height="58" viewBox="0 0 58 58"><rect x="2" y="2" width="54" height="54" rx="16" fill="#eef3f8"/><path d="M20 24h18l3 18H17l3-18z" fill="#33587a"/><path d="M24 24v-3a5 5 0 0110 0v3" stroke="#1a3a5c" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="24" y="30" width="10" height="7" rx="2" fill="#e6a817"/></svg>
+        <div class="nm">방수 가방</div>
+      </div>
+    </div>
+
+    <div class="card red">
+      <h3>🏷️ 모든 물품에 이름을 적어주세요</h3>
+      <p>수영복·수경·수건·가방 모두에 이름을 써 주세요. 가방 겉면에도 잘 보이게 적어주시면 찾기 쉽습니다.</p>
+    </div>
+
+    <div class="card">
+      <h3>센터에서 준비합니다</h3>
+      <div class="center-kit"><span>수영모자</span><span>샤워용품</span><span>드라이기</span></div>
+    </div>
+  </div>
+
+  <!-- 5. 수업 전 -->
+  <div class="slide">
+    <div class="st"><span class="no">5</span>물에 들어가기 전에</div>
+    <div class="lead">안전한 수업을 위해 함께 지켜 주세요.</div>
+
+    <div class="card red">
+      <h3>⏰ 식사·간식은 수업 2시간 전까지</h3>
+      <p>3시 수업은 <span class="b">오후 1시부터</span> 음식 섭취를 삼가 주세요.<br>물속에서 구토하면 호흡이 어려워질 수 있어요.</p>
+      <p style="margin-top:6px"><span class="em">오후 1시 이후 음식을 먹은 경우 그날 수업에는 참여할 수 없습니다.</span></p>
+    </div>
+
+    <div class="card">
+      <h3>수업 전</h3>
+      <ul>
+        <li>화장실에 다녀온 뒤 <span class="b">앉아서 기다려 주세요.</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>참여 제한 · 수업 종료</h3>
+      <ul>
+        <li>고열·설사 등 <span class="b">건강상 위험이 있는 경우</span></li>
+        <li>수업 중 대소변 사고가 발생한 경우 <span class="b">당일 수업 종료</span></li>
+      </ul>
+    </div>
+
+    <div class="fin">아이 컨디션이 좋지 않은 날은<br>무리하지 않도록 미리 알려주세요</div>
+  </div>
+
+  <!-- 6. 문의·보강·회비 -->
+  <div class="slide">
+    <div class="st"><span class="no">6</span>궁금한 점이 있나요?</div>
+    <div class="lead">수업·수영장 이용 문의와 불만사항은 센터로 알려주세요.</div>
+
+    <div class="card navy">
+      <h3>💬 문의</h3>
+      <p><span class="b">JS운동발달센터</span> 또는 담당 선생님께 말씀해 주세요.</p>
+    </div>
+
+    <div class="card">
+      <h3>보강 제공</h3>
+      <ul>
+        <li>센터 사정</li>
+        <li>공휴일</li>
+        <li>기상 악화로 수업이 취소된 경우</li>
+      </ul>
+    </div>
+
+    <div class="card red">
+      <h3>개인 사유로 결석</h3>
+      <p><span class="em">환불 · 보강 불가</span></p>
+    </div>
+
+    <div class="card gold">
+      <h3>회비</h3>
+      <p>매월 <span class="gold-t">10일 선납</span></p>
+      <div class="cal">
+        <div class="hd">일</div><div class="hd">월</div><div class="hd">화</div><div class="hd">수</div><div class="hd">목</div><div class="hd">금</div><div class="hd">토</div>
+        <div></div><div></div><div></div><div></div><div></div><div></div><div>1</div>
+        <div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div>
+        <div>9</div><div class="pay">10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div>
+      </div>
+    </div>
+
+    <div class="fin">첫 수업도 즐겁게 시작할 수 있도록<br>센터에서 함께 준비하겠습니다 🏊
+      <small>JS 운동발달센터</small>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button id="prevBtn" aria-label="이전">‹</button>
+  <div class="dots" id="dots"></div>
+  <span id="counter">1 / 7</span>
+  <button id="nextBtn" aria-label="다음">›</button>
+</div>
+
+<script>
+(function() {
+  var slides = document.querySelectorAll('.slide');
+  var total = slides.length;
+  var current = 0;
+  var dots = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+
+  for (var i = 0; i < total; i++) {
+    (function(idx) {
+      var dot = document.createElement('div');
+      dot.className = 'dot' + (idx === 0 ? ' active' : '');
+      dot.addEventListener('click', function() { goTo(idx); });
+      dots.appendChild(dot);
+    })(i);
+  }
+  updateUI();
+
+  function goTo(index) {
+    if (index === current || index < 0 || index >= total) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+    var self = current;
+    setTimeout(function() {
+      slides[self].classList.remove('exit');
+      slides[index].classList.add('active');
+      slides[index].scrollTop = 0;
+    }, 50);
+    current = index;
+    updateUI();
+  }
+
+  function updateUI() {
+    counter.textContent = (current + 1) + ' / ' + total;
+    prevBtn.disabled = (current === 0);
+    nextBtn.disabled = (current === total - 1);
+    var allDots = dots.querySelectorAll('.dot');
+    for (var i = 0; i < allDots.length; i++) {
+      allDots[i].classList.toggle('active', i === current);
+    }
+  }
+
+  function next() { if (current < total - 1) goTo(current + 1); }
+  function prev() { if (current > 0) goTo(current - 1); }
+
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+
+  var touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  });
+  document.addEventListener('touchend', function(e) {
+    var diff = touchStartX - e.changedTouches[0].screenX;
+    var dy = Math.abs(touchStartY - e.changedTouches[0].screenY);
+    if (Math.abs(diff) > 50 && dy < 60) {
+      if (diff > 0) next();
+      else prev();
+    }
+  });
+})();
+</script>
+</body>
+</html>
