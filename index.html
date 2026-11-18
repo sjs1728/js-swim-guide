@@ -130,16 +130,16 @@
     position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
     display: flex; align-items: center; gap: 12px;
     background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);
-    padding: 9px 16px; border-radius: 999px; z-index: 50;
+    padding: 9px 14px; border-radius: 999px; z-index: 50; white-space: nowrap;
   }
   .nav button {
     background: none; border: none; color: #fff; font-size: 16px; cursor: pointer;
     opacity: .85; padding: 2px 4px; line-height: 1;
   }
   .nav button:disabled { opacity: .25; cursor: default; }
-  .dots { display: flex; gap: 6px; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.35); cursor: pointer; transition: .3s; }
-  .dot.active { background: #e6a817; width: 16px; border-radius: 4px; }
+  .dots { display: flex; gap: 5px; flex-wrap: nowrap; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.35); cursor: pointer; transition: .3s; flex: none; }
+  .dot.active { background: #e6a817; width: 14px; border-radius: 3px; }
   #counter { color: rgba(255,255,255,.75); font-size: 11px; font-weight: 700; min-width: 30px; text-align: center; }
 </style>
 </head>
